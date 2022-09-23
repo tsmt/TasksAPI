@@ -11,7 +11,7 @@
 
 ----
 
-Connection String "DBConnection" в appsettings.json
+Connection String "DBConnection" в appsettings.json.
 В Package Manager Console выполнить команду update-database
 
 Страница для доступа к описанию и проверке методов https://localhost:7293/swagger/index.html
