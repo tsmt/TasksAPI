@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TasksAPI</name>
+    </assembly>
+    <members>
+        <member name="M:TasksAPI.Controllers.TestTasksController.GetAllTasks">
+            <summary>
+            Получение списка всех задач
+            </summary>
+            <returns>список задач</returns>
+        </member>
+        <member name="M:TasksAPI.Controllers.TestTasksController.CreateTestTask(System.String,TasksAPI.Enums.TaskState)">
+            <summary>
+            Создание задачи
+            </summary>
+            <param name="Name">наименование</param>
+            <param name="state">состояние</param>
+            <returns></returns>
+        </member>
+        <member name="M:TasksAPI.Controllers.TestTasksController.UpdateTestTask(TasksAPI.Models.TestTask)">
+            <summary>
+            Обновление задачи
+            </summary>
+            <param name="testTask"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TasksAPI.Controllers.TestTasksController.DeleteTask(System.Int32)">
+            <summary>
+            Удаление задачи
+            </summary>
+            <param name="taskId">Id задачи</param>
+            <returns></returns>
+        </member>
+        <member name="M:TasksAPI.Controllers.TestTasksController.AttachFilesToTask(System.Int32,System.Collections.Generic.List{Microsoft.AspNetCore.Http.IFormFile})">
+            <summary>
+            Добавляет файлы к задаче
+            </summary>
+            <param name="taskId">Id задачи</param>
+            <param name="files">список файлов</param>
+            <returns>результат выполнения запроса</returns>
+        </member>
+        <member name="M:TasksAPI.Controllers.TestTasksController.DeleteTaskFiles(System.Int32)">
+            <summary>
+            Удаление всех файлов из задачи
+            </summary>
+            <param name="taskId">Id задачи</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
