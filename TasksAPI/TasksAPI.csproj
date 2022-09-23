@@ -29,10 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Uploads\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="TasksAPI.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
