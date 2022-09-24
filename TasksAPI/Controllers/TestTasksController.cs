@@ -35,6 +35,22 @@ namespace TasksAPI.Controllers
             return Ok(testTasks);
         }
 
+        /// <summary>
+        /// Получает задачу
+        /// </summary>
+        /// <param name="taskId">id задачи</param>
+        /// <returns>возвращает задачу</returns>
+        [HttpGet("GetTask")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetTask(int taskId)
+        {
+            TestTask testTask = await _taskService.FindById(taskId);
+            
+            if (testTask != null)
+                return Ok(testTask);
+            return BadRequest($"task with id={taskId} not found");
+        }
 
         /// <summary>
         /// Создание задачи
@@ -139,6 +155,27 @@ namespace TasksAPI.Controllers
             {
                 await _filesService.DeleteTaskFilesAsync(taskId);
                 return Ok("all files removed");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Скачивание файла
+        /// </summary>
+        /// <param name="fileId">id файла</param>
+        /// <returns></returns>
+        [HttpGet("DownloadFile")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DownloadFile(int fileId)
+        {
+            try
+            {
+                TaskFile taskFile = await _filesService.DownloadFile(fileId);
+                return File(taskFile.ContentBytes, taskFile.ContentType, taskFile.FilePath);
             }
             catch (Exception ex)
             {

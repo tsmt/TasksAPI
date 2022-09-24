@@ -39,14 +39,15 @@ namespace TasksAPI.Services
             return null;
         }        
 
-        public TestTask FindById(int id)
+        public async Task<TestTask> FindById(int id)
         {
-            return _context.TestTasks.Include(x => x.Files).FirstOrDefault(x => x.Id == id);
+            TestTask testTask = await _context.TestTasks.Include(x => x.Files).FirstOrDefaultAsync(x => x.Id == id);
+            return testTask;
         }
 
         public async Task<TestTask> UpdateTestTaskAsync(TestTask newTestTask)
         {
-            TestTask testTask = FindById(newTestTask.Id);
+            TestTask testTask = await FindById(newTestTask.Id);
 
             if (testTask == null)
                 throw new Exception($"task with id={newTestTask.Id} not found");
@@ -63,7 +64,7 @@ namespace TasksAPI.Services
 
         public async Task DeleteTestTaskAsync(int taskId)
         {
-            TestTask testTask = FindById(taskId);
+            TestTask testTask = await FindById(taskId);
 
             if (testTask == null)
                 throw new Exception($"task with id={taskId} not found");

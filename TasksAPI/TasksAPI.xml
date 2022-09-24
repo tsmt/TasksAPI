@@ -10,6 +10,13 @@
             </summary>
             <returns>список задач</returns>
         </member>
+        <member name="M:TasksAPI.Controllers.TestTasksController.GetTask(System.Int32)">
+            <summary>
+            Получает задачу
+            </summary>
+            <param name="taskId">id задачи</param>
+            <returns>возвращает задачу</returns>
+        </member>
         <member name="M:TasksAPI.Controllers.TestTasksController.CreateTestTask(System.String,TasksAPI.Enums.TaskState)">
             <summary>
             Создание задачи
@@ -45,6 +52,13 @@
             Удаление всех файлов из задачи
             </summary>
             <param name="taskId">Id задачи</param>
+            <returns></returns>
+        </member>
+        <member name="M:TasksAPI.Controllers.TestTasksController.DownloadFile(System.Int32)">
+            <summary>
+            Скачивание файла
+            </summary>
+            <param name="fileId">id файла</param>
             <returns></returns>
         </member>
     </members>

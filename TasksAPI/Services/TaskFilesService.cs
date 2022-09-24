@@ -1,4 +1,6 @@
-﻿using TasksAPI.Data;
+﻿using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
+using TasksAPI.Data;
 using TasksAPI.Models;
 
 namespace TasksAPI.Services
@@ -31,7 +33,8 @@ namespace TasksAPI.Services
                 TaskFile taskFile = new TaskFile()
                 {
                     TaskId = taskId,
-                    Filename = file.FileName
+                    Filename = file.FileName,
+                    ContentType = file.ContentType
                 };
 
                 using (var stream = System.IO.File.Create(filePath))
@@ -49,7 +52,7 @@ namespace TasksAPI.Services
         {
             TestTask testTask = null;
 
-            testTask = _tasksService.FindById(taskId);
+            testTask = await _tasksService.FindById(taskId);
 
             if (testTask == null)
                 throw new Exception($"task with id={taskId} not found");
@@ -70,6 +73,35 @@ namespace TasksAPI.Services
 
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<TaskFile> DownloadFile(int fileId)
+        {
+            TaskFile taskFile = await FindById(fileId);
+            if (taskFile == null)
+                throw new Exception($"file with id={fileId} not found");
+
+            string uploadPath = _configuration.GetValue<string>("UploadPath");
+            string filePath = Path.Combine(uploadPath, $"{taskFile.TaskId}\\{taskFile.Filename}");
+
+            if (String.IsNullOrEmpty(taskFile.ContentType))
+            {
+                var provider = new FileExtensionContentTypeProvider();
+                if (!provider.TryGetContentType(filePath, out var contentType))
+                {
+                    taskFile.ContentType = "application/octet-stream";
+                }
+            }
+
+            taskFile.ContentBytes = await File.ReadAllBytesAsync(filePath);
+            taskFile.FilePath = Path.GetFileName(filePath);
+            return taskFile;
+        }
+
+        public async Task<TaskFile> FindById(int fileId)
+        {
+            TaskFile taskFile = await _context.TaskFiles.FirstOrDefaultAsync(f => f.Id == fileId);
+            return taskFile;
         }
     }
 }
