@@ -13,10 +13,9 @@ namespace TasksAPI.Services
         {
             _context = context;
         }
-
-        public async Task<List<TestTask>> GetALlTasks()
+        public IQueryable<TestTask> GetALlTasks()
         {
-            var testTasks = await _context.TestTasks.AsNoTracking().Include(t => t.Files).ToListAsync();
+            var testTasks = _context.TestTasks.AsNoTracking().Include(t => t.Files);
             return testTasks;
         }
 

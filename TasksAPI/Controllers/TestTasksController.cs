@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using TasksAPI.Enums;
+using TasksAPI.Extensions;
 using TasksAPI.Models;
 using TasksAPI.Services;
 
@@ -24,14 +25,17 @@ namespace TasksAPI.Controllers
 
 
         /// <summary>
-        /// Получение списка всех задач
+        /// Получение постраничного списка всех задач
         /// </summary>
-        /// <returns>список задач</returns>
+        /// <param name="pageNum">номер страницы</param>
+        /// <param name="pageSize">по сколько задач выводим</param>
+        /// <returns></returns>
         [HttpGet("GetAllTasks")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllTasks()
+        public async Task<IActionResult> GetAllTasks(int pageNum = 1, int pageSize = 10)
         {
-            List<TestTask> testTasks = await _taskService.GetALlTasks();
+            IQueryable<TestTask> query = _taskService.GetALlTasks();
+            List<TestTask> testTasks = await PagedList<TestTask>.ToPagedListAsync(query, pageNum, pageSize);
             return Ok(testTasks);
         }
 
@@ -124,16 +128,17 @@ namespace TasksAPI.Controllers
         {
             if (files?.Count() > 0)
             {
+                List<TaskFile> result;
+
                 try
                 {
-                    await _filesService.AttachFilesToTaskAsync(taskId, files);
+                    result = await _filesService.AttachFilesToTaskAsync(taskId, files);
+                    return Ok(result);
                 }
                 catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
                 }
-
-                return Ok($"{files.Count} files uploaded");
             }
             else
             {

@@ -4,11 +4,13 @@
         <name>TasksAPI</name>
     </assembly>
     <members>
-        <member name="M:TasksAPI.Controllers.TestTasksController.GetAllTasks">
+        <member name="M:TasksAPI.Controllers.TestTasksController.GetAllTasks(System.Int32,System.Int32)">
             <summary>
-            Получение списка всех задач
+            Получение постраничного списка всех задач
             </summary>
-            <returns>список задач</returns>
+            <param name="pageNum">номер страницы</param>
+            <param name="pageSize">по сколько задач выводим</param>
+            <returns></returns>
         </member>
         <member name="M:TasksAPI.Controllers.TestTasksController.GetTask(System.Int32)">
             <summary>

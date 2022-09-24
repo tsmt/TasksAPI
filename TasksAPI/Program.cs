@@ -11,7 +11,7 @@ ConfigurationManager configuration = builder.Configuration;
 string connection = configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<WebApiContext>(options =>
-    options.UseSqlServer(connection));
+    options.UseSqlServer(connection), ServiceLifetime.Transient);
 
 // Add services to the container.
 

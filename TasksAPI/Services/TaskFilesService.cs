@@ -18,10 +18,12 @@ namespace TasksAPI.Services
             _tasksService = tasksService;
         }
 
-        public async Task AttachFilesToTaskAsync(int taskId, List<IFormFile> files)
+        public async Task<List<TaskFile>> AttachFilesToTaskAsync(int taskId, List<IFormFile> files)
         {
             if (_tasksService.FindById(taskId) == null)
                 throw new Exception($"task with id={taskId} not found");
+
+            List<TaskFile> result = new List<TaskFile>();
 
             foreach (var file in files)
             {
@@ -43,9 +45,11 @@ namespace TasksAPI.Services
                 }
 
                 await _context.TaskFiles.AddAsync(taskFile);
+                result.Add(taskFile);
             }
             
             await _context.SaveChangesAsync();
+            return result;
         }
 
         public async Task DeleteTaskFilesAsync(int taskId)
