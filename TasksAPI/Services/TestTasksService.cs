@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TasksAPI.Data;
 using TasksAPI.Enums;
+using TasksAPI.Extensions;
 using TasksAPI.Models;
 
 namespace TasksAPI.Services
@@ -13,10 +14,12 @@ namespace TasksAPI.Services
         {
             _context = context;
         }
-        public IQueryable<TestTask> GetALlTasks()
+        public async Task<PagedList<TestTask>> GetALlTasks(int pageNum, int pageSize)
         {
             var testTasks = _context.TestTasks.AsNoTracking().Include(t => t.Files);
-            return testTasks;
+            PagedList<TestTask> list = new PagedList<TestTask>();
+            var result = await list.ToPagedListAsync(testTasks, pageNum, pageSize);
+            return result;
         }
 
         public async Task<TestTask> CreateTestTaskAsync(string taskName, TaskState state)

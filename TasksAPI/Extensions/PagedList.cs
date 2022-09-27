@@ -2,7 +2,7 @@
 
 namespace TasksAPI.Extensions
 {
-    public class PagedList<T> : List<T>
+    public class PagedList<T>
     {
         public int CurrentPage { get; private set; }
         public int TotalPages { get; private set; }
@@ -10,29 +10,26 @@ namespace TasksAPI.Extensions
         public int TotalCount { get; private set; }
         public bool HasPrevious => CurrentPage > 1;
         public bool HasNext => CurrentPage < TotalPages;
-        public PagedList(List<T> items, int count, int pageNumber, int pageSize)
+        public List<T> Items { get; set; }
+
+        public async Task<PagedList<T>> ToPagedListAsync(IQueryable<T> source, int pageNumber, int pageSize)
         {
-            TotalCount = count;
+            TotalCount = source.Count();
             PageSize = pageSize;
             CurrentPage = pageNumber;
-            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-            AddRange(items);
-        }
-        public static async Task<PagedList<T>> ToPagedListAsync(IQueryable<T> source, int pageNumber, int pageSize)
-        {
-            var count = source.Count();
+            TotalPages = (int)Math.Ceiling(TotalCount / (double)pageSize);
 
             if (pageSize <= 0)
             {
-                pageSize = count;
+                pageSize = TotalCount;
             }
 
             if (pageNumber <= 0)
             {
                 pageNumber = 1;
             }
-            var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
-            return new PagedList<T>(items, count, pageNumber, pageSize);
+            Items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            return this;
         }
     }
 }

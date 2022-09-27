@@ -4,6 +4,28 @@
         <name>TasksAPI</name>
     </assembly>
     <members>
+        <member name="M:TasksAPI.Controllers.TaskFilesController.AttachFilesToTask(System.Int32,System.Collections.Generic.List{Microsoft.AspNetCore.Http.IFormFile})">
+            <summary>
+            Добавляет файлы к задаче
+            </summary>
+            <param name="taskId">Id задачи</param>
+            <param name="files">список файлов</param>
+            <returns>результат выполнения запроса</returns>
+        </member>
+        <member name="M:TasksAPI.Controllers.TaskFilesController.DeleteTaskFiles(System.Int32)">
+            <summary>
+            Удаление всех файлов из задачи
+            </summary>
+            <param name="taskId">Id задачи</param>
+            <returns></returns>
+        </member>
+        <member name="M:TasksAPI.Controllers.TaskFilesController.DownloadFile(System.Int32)">
+            <summary>
+            Скачивание файла
+            </summary>
+            <param name="fileId">id файла</param>
+            <returns></returns>
+        </member>
         <member name="M:TasksAPI.Controllers.TestTasksController.GetAllTasks(System.Int32,System.Int32)">
             <summary>
             Получение постраничного списка всех задач
@@ -39,28 +61,6 @@
             Удаление задачи
             </summary>
             <param name="taskId">Id задачи</param>
-            <returns></returns>
-        </member>
-        <member name="M:TasksAPI.Controllers.TestTasksController.AttachFilesToTask(System.Int32,System.Collections.Generic.List{Microsoft.AspNetCore.Http.IFormFile})">
-            <summary>
-            Добавляет файлы к задаче
-            </summary>
-            <param name="taskId">Id задачи</param>
-            <param name="files">список файлов</param>
-            <returns>результат выполнения запроса</returns>
-        </member>
-        <member name="M:TasksAPI.Controllers.TestTasksController.DeleteTaskFiles(System.Int32)">
-            <summary>
-            Удаление всех файлов из задачи
-            </summary>
-            <param name="taskId">Id задачи</param>
-            <returns></returns>
-        </member>
-        <member name="M:TasksAPI.Controllers.TestTasksController.DownloadFile(System.Int32)">
-            <summary>
-            Скачивание файла
-            </summary>
-            <param name="fileId">id файла</param>
             <returns></returns>
         </member>
     </members>

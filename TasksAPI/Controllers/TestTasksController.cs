@@ -13,16 +13,12 @@ namespace TasksAPI.Controllers
     {
         private readonly ILogger<TestTasksController> _logger;
         private readonly TestTasksService _taskService;
-        private readonly TaskFilesService _filesService;
 
-        public TestTasksController(ILogger<TestTasksController> logger, 
-            TestTasksService taskService, TaskFilesService filesService)
+        public TestTasksController(ILogger<TestTasksController> logger, TestTasksService taskService)
         {
             _logger = logger;
             _taskService = taskService;
-            _filesService = filesService;
         }
-
 
         /// <summary>
         /// Получение постраничного списка всех задач
@@ -34,8 +30,10 @@ namespace TasksAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllTasks(int pageNum = 1, int pageSize = 10)
         {
-            IQueryable<TestTask> query = _taskService.GetALlTasks();
-            List<TestTask> testTasks = await PagedList<TestTask>.ToPagedListAsync(query, pageNum, pageSize);
+            //IQueryable<TestTask> query = _taskService.GetALlTasks();
+            //List<TestTask> testTasks = await PagedList<TestTask>.ToPagedListAsync(query, pageNum, pageSize);
+
+            var testTasks = await _taskService.GetALlTasks(pageNum, pageSize);
             return Ok(testTasks);
         }
 
@@ -107,80 +105,6 @@ namespace TasksAPI.Controllers
             {
                 await _taskService.DeleteTestTaskAsync(taskId);
                 return Ok($"task id={taskId} removed");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Добавляет файлы к задаче
-        /// </summary>
-        /// <param name="taskId">Id задачи</param>
-        /// <param name="files">список файлов</param>
-        /// <returns>результат выполнения запроса</returns>
-        [HttpPost("AttachFilesToTask")]
-        [RequestSizeLimit(long.MaxValue)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> AttachFilesToTask(int taskId, [Required] List<IFormFile> files)
-        {
-            if (files?.Count() > 0)
-            {
-                List<TaskFile> result;
-
-                try
-                {
-                    result = await _filesService.AttachFilesToTaskAsync(taskId, files);
-                    return Ok(result);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-            else
-            {
-                return BadRequest("no file to upload");
-            }
-        }
-
-        /// <summary>
-        /// Удаление всех файлов из задачи
-        /// </summary>
-        /// <param name="taskId">Id задачи</param>
-        /// <returns></returns>
-        [HttpDelete("DeleteTaskFiles")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeleteTaskFiles(int taskId)
-        {
-            try
-            {
-                await _filesService.DeleteTaskFilesAsync(taskId);
-                return Ok("all files removed");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Скачивание файла
-        /// </summary>
-        /// <param name="fileId">id файла</param>
-        /// <returns></returns>
-        [HttpGet("DownloadFile")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DownloadFile(int fileId)
-        {
-            try
-            {
-                TaskFile taskFile = await _filesService.DownloadFile(fileId);
-                return File(taskFile.ContentBytes, taskFile.ContentType, taskFile.FilePath);
             }
             catch (Exception ex)
             {

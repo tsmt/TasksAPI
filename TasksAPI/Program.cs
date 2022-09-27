@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using TasksAPI.Data;
@@ -64,6 +66,17 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+string uploadPath = app.Configuration.GetValue<string>("UploadPath");
+
+app.UseFileServer(new FileServerOptions()
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), uploadPath)),
+    RequestPath = new PathString("/" + uploadPath),
+    EnableDirectoryBrowsing = false
+});
 
 app.UseAuthorization();
 

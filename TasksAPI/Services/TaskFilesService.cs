@@ -24,11 +24,10 @@ namespace TasksAPI.Services
                 throw new Exception($"task with id={taskId} not found");
 
             List<TaskFile> result = new List<TaskFile>();
+            string uploadPath = _configuration.GetValue<string>("UploadPath");
 
             foreach (var file in files)
             {
-                string uploadPath = _configuration.GetValue<string>("UploadPath");
-
                 Directory.CreateDirectory(Path.Combine(uploadPath, taskId.ToString()));
                 string filePath = Path.Combine(uploadPath, $"{taskId}\\{file.FileName}");
 
